@@ -20,6 +20,7 @@ import androidx.media3.exoplayer.audio.DefaultAudioSink
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import androidx.media3.session.DefaultMediaNotificationProvider
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -250,6 +251,9 @@ class InnerTubeAudioService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         InnerTubeClient.ensureInit()
+
+        // Set up the notification provider so the service stays active in the background
+        setMediaNotificationProvider(DefaultMediaNotificationProvider(this))
 
         val httpFactory = DefaultHttpDataSource.Factory()
             .setUserAgent(BROWSER_UA)
